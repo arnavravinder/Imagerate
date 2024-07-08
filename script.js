@@ -38,7 +38,8 @@ document.getElementById('uploadForm').addEventListener('submit', function(event)
                 newImageRef.set({
                     url: downloadURL,
                     likes: 0,
-                    dislikes: 0
+                    dislikes: 0,
+                    uid: auth.currentUser ? auth.currentUser.uid : null
                 });
                 uploadStatus.textContent = 'Upload successful!';
                 uploadStatus.style.color = 'green';
@@ -56,26 +57,74 @@ database.ref('images').on('value', function(snapshot) {
         const img = document.createElement('img');
         img.src = data.url;
         const likeButton = document.createElement('button');
-        likeButton.textContent = 'Like (' + data.likes + ')';
+        likeButton.className = 'like-btn';
+        likeButton.textContent = 'Smash (' + data.likes + ')';
         const dislikeButton = document.createElement('button');
-        dislikeButton.textContent = 'Dislike (' + data.dislikes + ')';
-        const likesCount = document.createElement('span');
-        const dislikesCount = document.createElement('span');
+        dislikeButton.className = 'dislike-btn';
+        dislikeButton.textContent = 'Pass (' + data.dislikes + ')';
+        const commentSection = document.createElement('div');
+        commentSection.className = 'comment-section';
+        const commentHeader = document.createElement('h3');
+        commentHeader.textContent = 'Comments';
+        const commentsContainer = document.createElement('div');
+        commentsContainer.className = 'comments-container';
+        const commentForm = document.createElement('form');
+        commentForm.className = 'comment-form';
+        const commentTextArea = document.createElement('textarea');
+        commentTextArea.placeholder = 'Add a comment...';
+        const commentButton = document.createElement('button');
+        commentButton.textContent = 'Submit';
+        
+        commentForm.appendChild(commentTextArea);
+        commentForm.appendChild(commentButton);
+        commentSection.appendChild(commentHeader);
+        commentSection.appendChild(commentsContainer);
+        commentSection.appendChild(commentForm);
+
         div.appendChild(img);
         div.appendChild(likeButton);
-        div.appendChild(likesCount);
         div.appendChild(dislikeButton);
-        div.appendChild(dislikesCount);
+        div.appendChild(commentSection);
         resultsContainer.appendChild(div);
 
         likeButton.addEventListener('click', function() {
             childSnapshot.ref.update({ likes: data.likes + 1 });
-            likesCount.textContent = `Likes: ${data.likes + 1}`;
+            likeButton.textContent = `Smash (${data.likes + 1})`;
         });
 
         dislikeButton.addEventListener('click', function() {
             childSnapshot.ref.update({ dislikes: data.dislikes + 1 });
-            dislikesCount.textContent = `Dislikes: ${data.dislikes + 1}`;
+            dislikeButton.textContent = `Pass (${data.dislikes + 1})`;
+        });
+
+        commentForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const commentText = commentTextArea.value;
+            if (!commentText) return;
+            const newCommentRef = childSnapshot.ref.child('comments').push();
+            newCommentRef.set({
+                text: commentText,
+                username: auth.currentUser ? auth.currentUser.displayName : 'Anonymous',
+                uid: auth.currentUser ? auth.currentUser.uid : null
+            });
+            commentTextArea.value = '';
+        });
+
+        childSnapshot.ref.child('comments').on('value', function(commentSnapshot) {
+            commentsContainer.innerHTML = '';
+            commentSnapshot.forEach(function(commentChildSnapshot) {
+                const commentData = commentChildSnapshot.val();
+                const commentDiv = document.createElement('div');
+                commentDiv.className = 'comment';
+                const usernameP = document.createElement('p');
+                usernameP.className = 'username';
+                usernameP.textContent = commentData.username;
+                const textP = document.createElement('p');
+                textP.textContent = commentData.text;
+                commentDiv.appendChild(usernameP);
+                commentDiv.appendChild(textP);
+                commentsContainer.appendChild(commentDiv);
+            });
         });
     });
 });
