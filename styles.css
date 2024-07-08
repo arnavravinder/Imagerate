@@ -47,4 +47,29 @@ h1, h2 {
     margin: 0.5rem;
     padding: 1rem;
     border: 1px solid #ccc;
+    position: relative;
+}
+
+#resultsContainer img {
+    width: 100%;
+    height: auto;
+}
+
+#resultsContainer button {
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+#resultsContainer button:disabled {
+    background-color: #ccc;
+}
+
+#uploadStatus {
+    margin-top: 1rem;
+    font-size: 1rem;
+    color: green;
 }
