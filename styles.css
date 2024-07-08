@@ -1,0 +1,50 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 1rem;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 1rem;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+main {
+    padding: 1rem;
+}
+
+h1, h2 {
+    color: #333;
+}
+
+#uploadForm {
+    margin-top: 1rem;
+}
+
+#resultsContainer {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#resultsContainer div {
+    margin: 0.5rem;
+    padding: 1rem;
+    border: 1px solid #ccc;
+}
