@@ -10,6 +10,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
+const auth = firebase.auth();
 const storage = firebase.storage();
 const database = firebase.database();
 
@@ -100,4 +101,48 @@ document.getElementById('photoInput').addEventListener('change', function() {
         }
     }
     reader.readAsDataURL(file);
+});
+
+const loginButton = document.getElementById('loginButton');
+const logoutButton = document.getElementById('logoutButton');
+const profileSection = document.getElementById('profile');
+const profileName = document.getElementById('profileName');
+const profileEmail = document.getElementById('profileEmail');
+
+loginButton.addEventListener('click', function() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider).then(result => {
+        const user = result.user;
+        loginButton.style.display = 'none';
+        logoutButton.style.display = 'inline';
+        profileSection.style.display = 'block';
+        profileName.textContent = `Name: ${user.displayName}`;
+        profileEmail.textContent = `Email: ${user.email}`;
+    }).catch(error => {
+        console.error('Error during login:', error);
+    });
+});
+
+logoutButton.addEventListener('click', function() {
+    auth.signOut().then(() => {
+        loginButton.style.display = 'inline';
+        logoutButton.style.display = 'none';
+        profileSection.style.display = 'none';
+    }).catch(error => {
+        console.error('Error during logout:', error);
+    });
+});
+
+auth.onAuthStateChanged(user => {
+    if (user) {
+        loginButton.style.display = 'none';
+        logoutButton.style.display = 'inline';
+        profileSection.style.display = 'block';
+        profileName.textContent = `Name: ${user.displayName}`;
+        profileEmail.textContent = `Email: ${user.email}`;
+    } else {
+        loginButton.style.display = 'inline';
+        logoutButton.style.display = 'none';
+        profileSection.style.display = 'none';
+    }
 });

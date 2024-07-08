@@ -13,7 +13,12 @@
                 <li><a href="#home">Home</a></li>
                 <li><a href="#upload">Upload</a></li>
                 <li><a href="#results">Results</a></li>
+                <li><a href="#profile">Profile</a></li>
             </ul>
+            <div id="authContainer">
+                <button id="loginButton">Login</button>
+                <button id="logoutButton" style="display: none;">Logout</button>
+            </div>
         </nav>
     </header>
     <main>
@@ -33,10 +38,18 @@
             <h2>Live Results</h2>
             <div id="resultsContainer"></div>
         </section>
+        <section id="profile" style="display: none;">
+            <h2>Your Profile</h2>
+            <div id="profileContainer">
+                <p id="profileName"></p>
+                <p id="profileEmail"></p>
+            </div>
+        </section>
     </main>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
